@@ -1,4 +1,4 @@
-﻿This is a implementation of a receiver/consumer from a queue in RabbtiMQ.
+﻿This is a implementation of a receiver/consumer from a queue in RabbitMQ.
 
 RabbitMQ is a open source message broker. https://www.rabbitmq.com/
 RabbitMQ docker image https://registry.hub.docker.com/_/rabbitmq/
