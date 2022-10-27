@@ -1,40 +1,77 @@
-﻿using RabbitMQ.Client;
+﻿using MessageQueueConsumerConsoleApp.Menu;
+using MessageQueueConsumerConsoleApp.UI;
 
 namespace MessageQueueConsumerConsoleApp
 {
-    public class Program : SimpleQueueConsumer
+    public class Program
     {
         static void Main(string[] args)
         {
             Program program = new Program();
-            IModel? channel = null;
+            program.RunProgram(new ConsoleUI());
+            //Console.WriteLine("Press a key to close application");
+            //Console.ReadLine();
+        }
 
+
+        /// <summary>
+        /// Method show main menu where a user selects functions
+        /// </summary>
+        /// <param name="ui">Reference to user interface</param>
+        public void RunProgram(IUI ui)
+        {
             try
             {
-                SimpleQueueConsumer consumer = new SimpleQueueConsumer();
+                MenuFactory menuFactory = new MenuFactory();
+                IQueueConsumer? consumer = null;
+                String? strInput = String.Empty;
 
-                // Create a IModel channel to RabbitMQ
-                channel = consumer.CreateChannel("guest", "guest", "/", "localhost", 5672);
+                do
+                {
+                    strInput = String.Empty;
 
-                Console.WriteLine("Running SimpleQueueConsumer...");
-                Console.WriteLine("Press a key to stop running");
+                    ui.Clear();
 
-                // Read messages. Press a key to stop running
-                consumer.ReadSimpleMessage(channel, "simpleMessage");
+                    // Show menu
+                    ui.WriteLine(menuFactory.GetMenu(MenuFactory.MenuType.Main_Menu));
+
+                    // Read input from console
+                    strInput = ui.ReadLine();
+
+                    if (!String.IsNullOrWhiteSpace(strInput))
+                    {
+                        strInput = strInput.Trim();
+
+                        if (strInput.Equals("0"))
+                        {// Exit program
+                            return;
+                        }
+                        else if (strInput.Equals("1"))
+                        {
+                            consumer = new SimpleQueueConsumer(ui);
+                            consumer.Run();                           
+
+                            ui.WriteLine("Press a key to continue");
+                            ui.ReadLine();
+                        }
+                        else if (strInput.Equals("2"))
+                        {
+                            consumer = new ExchangeQueueConsumer(ui);
+                            consumer.Run();
+
+                            ui.WriteLine("Press a key to continue");
+                            ui.ReadLine();
+                        }
+                    }
+
+
+                }
+                while (true);
             }
-            catch (Exception ex)
+            catch (Exception exc)
             {
-                Console.WriteLine("Program->Main() exception: " + ex.ToString());
+                ui.WriteLine("Program->RunProgram() exception: " + exc.ToString());
             }
-            finally
-            {
-                if (channel != null)
-                    channel.Close();
-            }
-
-
-            Console.WriteLine("Press a key to close application");
-            Console.ReadLine();
         }
     }
 }

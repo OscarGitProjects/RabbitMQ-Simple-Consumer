@@ -5,13 +5,13 @@ using System.Text;
 
 namespace MessageQueueConsumerConsoleApp
 {
-    public class SimpleQueueConsumer : BaseQueueConsumer, IQueueConsumer
+    public class ExchangeQueueConsumer : BaseQueueConsumer, IQueueConsumer
     {
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="ui">Reference to user interface</param>
-        public SimpleQueueConsumer(IUI ui) : base(ui)
+        public ExchangeQueueConsumer(IUI ui) : base(ui)
         { }
 
 
@@ -23,18 +23,31 @@ namespace MessageQueueConsumerConsoleApp
         /// <param name="strExchangeName">Name of the exchange</param>
         /// <exception cref="ArgumentNullException">Throws if reference to IModel channel is null</exception>
         /// <exception cref="Exception">Throws exception</exception>
-        public void ReadMessage(IModel channel, string strQueueName = "default-message-queue", string strExchangeName = "default-exchange")
+        public void ReadMessage(IModel channel, String strQueueName = "default-message-queue", String strExchangeName = "default-exchange")
         {
             if (channel == null)
-                throw new ArgumentNullException($"{nameof(SimpleQueueConsumer)}->ReadMessage(). Reference to IModel channel is null");
+                throw new ArgumentNullException($"{nameof(ExchangeQueueConsumer)}->ReadMessage(). Reference to IModel channel is null");
 
             try
             {
+                channel.ExchangeDeclare(
+                    exchange: strExchangeName,
+                    type: ExchangeType.Direct,
+                    durable: false,
+                    autoDelete: false,
+                    arguments: null);
+
                 channel.QueueDeclare(
                     queue: strQueueName,
                     durable: false,
                     exclusive: false,
                     autoDelete: false,
+                    arguments: null);
+
+                channel.QueueBind(
+                    queue: strQueueName, 
+                    exchange: strExchangeName, 
+                    routingKey: strQueueName, 
                     arguments: null);
 
                 var consumer = new EventingBasicConsumer(channel);
@@ -54,11 +67,10 @@ namespace MessageQueueConsumerConsoleApp
             }
             catch (Exception exc)
             {
-                Console.WriteLine($"{nameof(SimpleQueueConsumer)}->ReadSimpleMessage() exception: " + exc.ToString());
+                Console.WriteLine($"{nameof(ExchangeQueueConsumer)}->ReadMessage() exception: " + exc.ToString());
                 throw;
             }
         }
-
 
 
         /// <summary>
@@ -67,7 +79,6 @@ namespace MessageQueueConsumerConsoleApp
         /// <exception cref="Exception">Throws exception</exception>
         public void Run()
         {
-
             IModel? channel = null;
 
             try
@@ -75,15 +86,16 @@ namespace MessageQueueConsumerConsoleApp
                 // Create a IModel channel to RabbitMQ
                 channel = this.CreateChannel("guest", "guest", "/", "localhost", 5672);
 
-                this.m_Ui.WriteLine("Running SimpleQueueConsumer...");
+                this.m_Ui.WriteLine("Running ExchangeQueueConsumer...");
                 this.m_Ui.WriteLine("Press a key to stop running");
 
                 // Read messages. Press a key to stop running
-                this.ReadMessage(channel, "simple-message-queue");
+                this.ReadMessage(channel, "direct-exchange-message-queue", "direct-exchange");
             }
-            catch (Exception ex)
+            catch (Exception exc)
             {
-                this.m_Ui.WriteLine($"{nameof(SimpleQueueConsumer)}->Run() exception: " + ex.ToString());
+                this.m_Ui.WriteLine($"{nameof(ExchangeQueueConsumer)}->Run() exception: " + exc.ToString());
+                throw;
             }
             finally
             {
