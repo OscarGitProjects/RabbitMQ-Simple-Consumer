@@ -45,10 +45,13 @@ namespace MessageQueueConsumerConsoleApp
                     arguments: null);
 
                 channel.QueueBind(
-                    queue: strQueueName, 
-                    exchange: strExchangeName, 
-                    routingKey: strQueueName, 
+                    queue: strQueueName,
+                    exchange: strExchangeName,
+                    routingKey: strQueueName,
                     arguments: null);
+
+                // Fetch 10 messages at the time
+                //channel.BasicQos(0, 10, false);
 
                 var consumer = new EventingBasicConsumer(channel);
 
@@ -86,11 +89,15 @@ namespace MessageQueueConsumerConsoleApp
                 // Create a IModel channel to RabbitMQ
                 channel = this.CreateChannel("guest", "guest", "/", "localhost", 5672);
 
+                // Names for exchange and queue
+                string strExchangeName = "direct-exchange";
+                string strQueueName = "direct-exchange-message-queue";
+
                 this.m_Ui.WriteLine("Running ExchangeQueueConsumer...");
                 this.m_Ui.WriteLine("Press a key to stop running");
 
                 // Read messages. Press a key to stop running
-                this.ReadMessage(channel, "direct-exchange-message-queue", "direct-exchange");
+                this.ReadMessage(channel, strQueueName, strExchangeName);
             }
             catch (Exception exc)
             {

@@ -54,11 +54,10 @@ namespace MessageQueueConsumerConsoleApp
             }
             catch (Exception exc)
             {
-                Console.WriteLine($"{nameof(SimpleQueueConsumer)}->ReadSimpleMessage() exception: " + exc.ToString());
+                Console.WriteLine($"{nameof(SimpleQueueConsumer)}->ReadMessage() exception: " + exc.ToString());
                 throw;
             }
         }
-
 
 
         /// <summary>
@@ -75,11 +74,14 @@ namespace MessageQueueConsumerConsoleApp
                 // Create a IModel channel to RabbitMQ
                 channel = this.CreateChannel("guest", "guest", "/", "localhost", 5672);
 
+                // Create names for queue
+                string strQueueName = "simple-message-queue";
+
                 this.m_Ui.WriteLine("Running SimpleQueueConsumer...");
                 this.m_Ui.WriteLine("Press a key to stop running");
 
                 // Read messages. Press a key to stop running
-                this.ReadMessage(channel, "simple-message-queue");
+                this.ReadMessage(channel, strQueueName);
             }
             catch (Exception ex)
             {
