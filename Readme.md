@@ -3,11 +3,11 @@
 RabbitMQ is a open source message broker. https://www.rabbitmq.com/
 RabbitMQ docker image https://registry.hub.docker.com/_/rabbitmq/
 
-This application will receiver/consumer messages from queue in RabbitMQ with the name of simpleMessage
+This application will receiver/consumer messages from queue in RabbitMQ with the name of simpleMessage.
 You use this together with the sender/producer in the project RabbitMQ-Simple-Producer.
-You can run more the one receiver/consumer
+You can run more the one receiver/consumer.
 
-When i run this i have RabbitMQ running in a Docker container
+When i run this i have RabbitMQ running in a Docker container.
 
 You can get the docker image with this command
 docker run -it --rm --name Rabbit1 -p 5672:5672 -p 15672:15672 rabbitmq:3.10-management
