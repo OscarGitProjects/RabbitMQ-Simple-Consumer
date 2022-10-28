@@ -70,6 +70,14 @@ namespace MessageQueueConsumerConsoleApp
                             ui.WriteLine("Press a key to continue");
                             ui.ReadLine();
                         }
+                        else if (strInput.Equals("4"))
+                        {
+                            consumer = new HeaderExchangeQueueConsumer(ui);
+                            consumer.Run();
+
+                            ui.WriteLine("Press a key to continue");
+                            ui.ReadLine();
+                        }
                     }
                 }
                 while (true);

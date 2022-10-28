@@ -24,12 +24,13 @@ namespace MessageQueueConsumerConsoleApp.Menu
             switch(menuType)
             {
                 case MenuType.Main_Menu:
-                    strBuilder.AppendLine("Main menu");
+                    strBuilder.AppendLine("Main menu for the messages consumer");
                     strBuilder.AppendLine("Select number for desired function");
                     strBuilder.AppendLine("0. Exit program");
                     strBuilder.AppendLine("1. Read simple messages");
                     strBuilder.AppendLine("2. Read Direct Exchange messages");
                     strBuilder.AppendLine("3. Read Topic Exchange messages");
+                    strBuilder.AppendLine("4. Read Header Exchange messages");
                     strMenu = strBuilder.ToString();
                     break;
                 default:
