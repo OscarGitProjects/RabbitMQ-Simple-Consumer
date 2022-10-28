@@ -62,9 +62,15 @@ namespace MessageQueueConsumerConsoleApp
                             ui.WriteLine("Press a key to continue");
                             ui.ReadLine();
                         }
+                        else if (strInput.Equals("3"))
+                        {
+                            consumer = new TopicExchangeQueueConsumer(ui);
+                            consumer.Run();
+
+                            ui.WriteLine("Press a key to continue");
+                            ui.ReadLine();
+                        }
                     }
-
-
                 }
                 while (true);
             }

@@ -29,6 +29,7 @@ namespace MessageQueueConsumerConsoleApp.Menu
                     strBuilder.AppendLine("0. Exit program");
                     strBuilder.AppendLine("1. Read simple messages");
                     strBuilder.AppendLine("2. Read Direct Exchange messages");
+                    strBuilder.AppendLine("3. Read Topic Exchange messages");
                     strMenu = strBuilder.ToString();
                     break;
                 default:

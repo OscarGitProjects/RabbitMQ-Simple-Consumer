@@ -6,17 +6,16 @@ using System.Text;
 namespace MessageQueueConsumerConsoleApp
 {
     /// <summary>
-    /// Direct exchange. Uses routing key in the header to identify which queue the message should be sent to. 
-    /// Routing key is a header value set by the producer, and a consumer uses the routing key to bind to the queue. 
-    /// The exchange does exact match of the routing key values
+    /// Topic exchange uses routing key, but it does not do an exact match on the routing key. 
+    /// Instead it does a patterna match based on the pattern
     /// </summary>
-    public class ExchangeQueueConsumer : BaseQueueConsumer, IQueueConsumer
+    public class TopicExchangeQueueConsumer : BaseQueueConsumer, IQueueConsumer
     {
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="ui">Reference to user interface</param>
-        public ExchangeQueueConsumer(IUI ui) : base(ui)
+        public TopicExchangeQueueConsumer(IUI ui) : base(ui)
         { }
 
 
@@ -29,16 +28,16 @@ namespace MessageQueueConsumerConsoleApp
         /// <param name="strRoutingKey">Routing key</param>
         /// <exception cref="ArgumentNullException">Throws if reference to IModel channel is null</exception>
         /// <exception cref="Exception">Throws exception</exception>
-        public void ReadMessage(IModel channel, String strQueueName = "default-message-queue", String strExchangeName = "default-exchange", String strRoutingKey = "acount.init")
+        public void ReadMessage(IModel channel, string strQueueName = "default-message-queue", string strExchangeName = "default-exchange", string strRoutingKey = "acount.*")
         {
             if (channel == null)
-                throw new ArgumentNullException($"{nameof(ExchangeQueueConsumer)}->ReadMessage(). Reference to IModel channel is null");
+                throw new ArgumentNullException($"{nameof(TopicExchangeQueueConsumer)}->ReadMessage(). Reference to IModel channel is null");
 
             try
             {
                 channel.ExchangeDeclare(
                     exchange: strExchangeName,
-                    type: ExchangeType.Direct,
+                    type: ExchangeType.Topic,
                     durable: false,
                     autoDelete: false,
                     arguments: null);
@@ -76,7 +75,7 @@ namespace MessageQueueConsumerConsoleApp
             }
             catch (Exception exc)
             {
-                Console.WriteLine($"{nameof(ExchangeQueueConsumer)}->ReadMessage() exception: " + exc.ToString());
+                Console.WriteLine($"{nameof(TopicExchangeQueueConsumer)}->ReadMessage() exception: " + exc.ToString());
                 throw;
             }
         }
@@ -96,11 +95,11 @@ namespace MessageQueueConsumerConsoleApp
                 channel = this.CreateChannel("guest", "guest", "/", "localhost", 5672);
 
                 // Names for exchange and queue
-                string strExchangeName = "direct-exchange";
-                string strQueueName = "direct-exchange-message-queue";
-                string strRoutingKey = "acount.init";
+                string strExchangeName = "topic-exchange";
+                string strQueueName = "topic-exchange-message-queue";
+                string strRoutingKey = "acount.*";
 
-                this.m_Ui.WriteLine("Running ExchangeQueueConsumer...");
+                this.m_Ui.WriteLine("Running TopicExchangeQueueConsumer...");
                 this.m_Ui.WriteLine("Press a key to stop running");
 
                 // Read messages. Press a key to stop running
@@ -108,7 +107,7 @@ namespace MessageQueueConsumerConsoleApp
             }
             catch (Exception exc)
             {
-                this.m_Ui.WriteLine($"{nameof(ExchangeQueueConsumer)}->Run() exception: " + exc.ToString());
+                this.m_Ui.WriteLine($"{nameof(TopicExchangeQueueConsumer)}->Run() exception: " + exc.ToString());
                 throw;
             }
             finally

@@ -21,9 +21,10 @@ namespace MessageQueueConsumerConsoleApp
         /// <param name="channel">IModel channel</param>
         /// <param name="strQueueName">Name of the queue</param>
         /// <param name="strExchangeName">Name of the exchange</param>
+        /// <param name="strRoutingKey">Routing key</param>
         /// <exception cref="ArgumentNullException">Throws if reference to IModel channel is null</exception>
         /// <exception cref="Exception">Throws exception</exception>
-        public void ReadMessage(IModel channel, string strQueueName = "default-message-queue", string strExchangeName = "default-exchange")
+        public void ReadMessage(IModel channel, String strQueueName = "default-message-queue", String strExchangeName = "default-exchange", String strRoutingKey = "acount.init")
         {
             if (channel == null)
                 throw new ArgumentNullException($"{nameof(SimpleQueueConsumer)}->ReadMessage(). Reference to IModel channel is null");
@@ -89,8 +90,7 @@ namespace MessageQueueConsumerConsoleApp
             }
             finally
             {
-                if (channel != null)
-                    channel.Close();
+                channel?.Close();
             }
         }
     }
