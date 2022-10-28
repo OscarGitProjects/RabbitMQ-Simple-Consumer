@@ -78,6 +78,14 @@ namespace MessageQueueConsumerConsoleApp
                             ui.WriteLine("Press a key to continue");
                             ui.ReadLine();
                         }
+                        else if (strInput.Equals("5"))
+                        {
+                            consumer = new FanoutExchangeQueueConsumer(ui);
+                            consumer.Run();
+
+                            ui.WriteLine("Press a key to continue");
+                            ui.ReadLine();
+                        }
                     }
                 }
                 while (true);

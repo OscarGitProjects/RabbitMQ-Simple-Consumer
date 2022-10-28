@@ -31,6 +31,7 @@ namespace MessageQueueConsumerConsoleApp.Menu
                     strBuilder.AppendLine("2. Read Direct Exchange messages");
                     strBuilder.AppendLine("3. Read Topic Exchange messages");
                     strBuilder.AppendLine("4. Read Header Exchange messages");
+                    strBuilder.AppendLine("5. Read Fanout Exchange messages");
                     strMenu = strBuilder.ToString();
                     break;
                 default:

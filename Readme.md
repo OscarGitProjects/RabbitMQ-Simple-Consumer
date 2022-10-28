@@ -1,6 +1,5 @@
 ﻿This is a implementation of a receiver/consumer from a queue in RabbitMQ.
-In this version i have implemented queue with messages, direct exchange queue with messages, topic exchange with messages
-and header exchange with messages
+In this version i have implemented queue with messages, direct exchange queue, topic exchange queue, header exchange queue and fanout exchange queue
 You use this together with the sender/producer in the project RabbitMQ-Simple-Producer.
 
 First you run the message consumer. The RabbitMQ-Simple-Consumer project. In the menu you choose what kind of queue you want to use.
